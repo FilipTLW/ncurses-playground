@@ -1,0 +1,4 @@
+out/
+.envrc/
+.direnv/
+*.o
