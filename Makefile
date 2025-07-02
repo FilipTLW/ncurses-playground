@@ -10,7 +10,7 @@ all: out/ncurses-playground
 
 out/ncurses-playground: $(OBJS)
 	mkdir -p out
-	$(CC) $< -o out/ncurses-playground $(CFLAGS)
+	$(CC) $< -o $@ $(CFLAGS)
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
