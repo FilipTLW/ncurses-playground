@@ -9,11 +9,12 @@ src/main.o
 all: out/ncurses-playground
 
 out/ncurses-playground: $(OBJS)
-	mkdir out
+	mkdir -p out
 	$(CC) $< -o out/ncurses-playground $(CFLAGS)
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
+	rm -rf out
 	rm -f $(OBJS)
