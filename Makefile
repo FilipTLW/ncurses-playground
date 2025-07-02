@@ -6,10 +6,11 @@ src/main.o
 
 .SUFFIXES: .o .c
 
-all: ncurses-playground
+all: out/ncurses-playground
 
-ncurses-playground: $(OBJS)
-	$(CC) $< -o $@ $(CFLAGS)
+out/ncurses-playground: $(OBJS)
+	mkdir out
+	$(CC) $< -o out/ncurses-playground $(CFLAGS)
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
