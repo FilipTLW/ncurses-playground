@@ -1,5 +1,10 @@
+PKG_CFLAGS:=$(shell pkg-config --cflags ncurses)
+PKG_LDFLAGS:=$(shell pkg-config --libs ncurses)
+
 CFLAGS?=-Wall -O2
-CFLAGS:=$(CFLAGS) -lncurses
+CFLAGS+= $(PKG_CFLAGS)
+LDFLAGS?=
+LDFLAGS+= $(PKG_LDFLAGS)
 
 OBJS=\
 src/main.o
@@ -10,7 +15,7 @@ all: out/ncurses-playground
 
 out/ncurses-playground: $(OBJS)
 	mkdir -p out
-	$(CC) $< -o $@ $(CFLAGS)
+	$(CC) $< -o $@ $(LDFLAGS)
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
