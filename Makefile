@@ -7,7 +7,8 @@ LDFLAGS?=
 LDFLAGS+= $(PKG_LDFLAGS)
 
 OBJS=\
-src/main.o
+src/main.o\
+src/file_handler.o
 
 .SUFFIXES: .o .c
 
@@ -15,7 +16,7 @@ all: out/ncurses-playground
 
 out/ncurses-playground: $(OBJS)
 	mkdir -p out
-	$(CC) $< -o $@ $(LDFLAGS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
