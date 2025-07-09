@@ -8,7 +8,7 @@ LDFLAGS+= $(PKG_LDFLAGS)
 
 OBJS=\
 src/main.o\
-src/file_handler.o
+src/file_dialog.o
 
 .SUFFIXES: .o .c
 

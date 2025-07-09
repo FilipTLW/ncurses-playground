@@ -1,6 +1,6 @@
 #include <ncurses.h>
 #include <stdlib.h>
-#include "file_handler.h"
+#include "file_dialog.h"
 
 int main() {
     WINDOW *file_handler_dialog;
