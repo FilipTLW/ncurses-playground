@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include "file_dialog.h"
+#include "editor.h"
 
 int main() {
     WINDOW *file_handler_dialog;
@@ -14,8 +15,8 @@ int main() {
 
     file_handler_dialog = open_file_dialog();
     file_name = get_file_name(file_handler_dialog);
-    printw("%s", file_name);
-    refresh();
+
+    editor_launch(file_name);
 
     getch();
     endwin();
