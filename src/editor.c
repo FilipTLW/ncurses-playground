@@ -2,6 +2,7 @@
 #include "string.h"
 #include <ncurses.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define LINE_BLOCK_LENGTH 255
 #define LINE_PADDING 32
@@ -13,11 +14,28 @@ void create_line(LINE *line, char *content, size_t length) {
     memmove(line->content, content, length);
 }
 
+void editor_process(char *filename, LINE *lines, size_t line_count, size_t length) {
+    int ln, col, ch;
+    move(0, 0);
+    for (ln = 0; ln < line_count; ln++) {
+        for (col = 0; col < lines[ln].length; col++) {
+            addch(lines[ln].content[col]);
+        }
+        addch('\n');
+    }
+    refresh();
+
+
+    while ((ch = getch()) != ('x'&037)) {
+    }
+
+}
+
 void editor_launch(char *filename) {
     FILE *file;
-    char *block, *new_block;
-    LINE *line_block, *new_line_block;
-    int ch, ln, col;
+    char *block;
+    LINE *line_block;
+    int ch, ln;
     size_t length, full_block_length, block_length, full_line_block_length, line_block_length;
 
     clear();
@@ -36,10 +54,7 @@ void editor_launch(char *filename) {
         }
         if (ch == '\n') {
             if (line_block_length == full_line_block_length) {
-                new_line_block = malloc(full_line_block_length + sizeof(LINE) * LINE_BLOCK_BLOCK_LENGTH);
-                memmove(new_line_block, line_block, full_line_block_length);
-                free(line_block);
-                line_block = new_line_block;
+                line_block = realloc(line_block, full_line_block_length + sizeof(LINE) * LINE_BLOCK_BLOCK_LENGTH);
                 full_line_block_length += LINE_BLOCK_BLOCK_LENGTH;
             }
             create_line(line_block + line_block_length, block, block_length);
@@ -48,10 +63,7 @@ void editor_launch(char *filename) {
             line_block_length++;
         } else {
             if (block_length == full_block_length) {
-                new_block = malloc(full_block_length + sizeof(char) * LINE_BLOCK_LENGTH);
-                memmove(new_block, block, full_block_length);
-                free(block);
-                block = new_block;
+                block = realloc(block, full_block_length + sizeof(char) * LINE_BLOCK_LENGTH);
                 full_block_length += LINE_BLOCK_LENGTH;
             }
             block[block_length] = ch;
@@ -59,20 +71,15 @@ void editor_launch(char *filename) {
         }
         length++;
     }
+    free(block);
     fclose(file);
 
-    move(0, 0);
+    editor_process(filename, line_block, line_block_length, length);
+
     for (ln = 0; ln < line_block_length; ln++) {
-        for (col = 0; col < line_block[ln].length; col++) {
-            addch(line_block[ln].content[col]);
-        }
-        addch('\n');
+        free(line_block[ln].content);
     }
-    refresh();
-
-
-    while ((ch = getch()) != ('x'&037)) {
-    }
+    free(line_block);
 
     refresh();
 }
