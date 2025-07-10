@@ -15,7 +15,7 @@ void create_line(LINE *line, char *content, size_t length) {
 }
 
 void editor_process(char *filename, LINE *lines, size_t line_count, size_t length) {
-    int ln, col, ch;
+    int ln, col, virt_col, ch;
     move(0, 0);
     for (ln = 0; ln < line_count; ln++) {
         for (col = 0; col < lines[ln].length; col++) {
@@ -23,10 +23,33 @@ void editor_process(char *filename, LINE *lines, size_t line_count, size_t lengt
         }
         addch('\n');
     }
+
+    ln = 0, col = 0, virt_col = 0;
+    move(0, 0);
     refresh();
-
-
     while ((ch = getch()) != ('x'&037)) {
+        switch (ch) {
+            case KEY_LEFT:
+                if (col > 0) col--;
+                virt_col = col;
+                break;
+            case KEY_RIGHT:
+                if (col < lines[ln].length) col++;
+                virt_col = col;
+                break;
+            case KEY_UP:
+                if (ln > 0) ln--;
+                if (virt_col >= lines[ln].length) col = lines[ln].length;
+                else col = virt_col;
+                break;
+            case KEY_DOWN:
+                if (ln < line_count) ln++;
+                if (virt_col >= lines[ln].length) col = lines[ln].length;
+                else col = virt_col;
+                break;
+        }
+        move(ln, col);
+        refresh();
     }
 
 }
