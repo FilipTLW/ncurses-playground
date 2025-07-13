@@ -4,7 +4,7 @@ PKG_LDFLAGS:=$(shell pkg-config --libs ncurses)
 CFLAGS?=-Wall -O2
 CFLAGS+= $(PKG_CFLAGS)
 LDFLAGS?=
-LDFLAGS+= $(PKG_LDFLAGS)
+LDFLAGS+= $(PKG_LDFLAGS) -lm
 
 OBJS=\
 src/main.o\
